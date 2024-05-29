@@ -27,7 +27,7 @@ ui <- dashboardPage(
       menuItem("Info", tabName = "info", icon = icon("info")),
       
       menuItem(
-        "Survey 1 (Morals/Values)",
+        "Survey 1",
         tabName = "Survey 1",
         icon = icon("bars"),
         startExpanded = TRUE,
@@ -277,7 +277,7 @@ ui <- dashboardPage(
           conditionalPanel(
             condition = "input.tabletype_s1 == 'Demographic'",
             box(
-              title = "Survey 1 (Morals/Values) Demograpics",
+              title = "Survey 1 Demograpics",
               width = 9,
               solidHeader = TRUE,
               tableOutput("demotab.s1")
@@ -289,7 +289,7 @@ ui <- dashboardPage(
           conditionalPanel(
             condition = "input.tabletype_s1 == 'Correlation Matrix'",
             box(
-              title = "Survey 1 (Morals/Values) Correlations",
+              title = "Survey 1 Correlations",
               width = 9,
               solidHeader = TRUE,
               div(style = "overflow-x: scroll; overflow-y: scroll",
@@ -301,7 +301,7 @@ ui <- dashboardPage(
           conditionalPanel(
             condition = "input.tabletype_s1 == 'Crosstabs'",
             box(
-              title = "Survey 1 (Morals/Values) Crosstabs",
+              title = "Survey 1 Crosstabs",
               width = 9,
               solidHeader = TRUE,
               gt_output("crosstabs.s1")
@@ -313,7 +313,7 @@ ui <- dashboardPage(
           conditionalPanel(
             condition = "input.tabletype_s1 == 'Summary Stats'",
             box(
-              title = "Survey 1 (Morals/Values) Summary",
+              title = "Survey 1 Summary",
               width = 9,
               solidHeader = TRUE,
               gt_output("summarystats.s1")
@@ -562,7 +562,7 @@ ui <- dashboardPage(
             condition = "input.tabletype_s1 == 'Correlation Matrix'",
             box(
               width = 9,
-              title = "Survey 1 (Morals/Values) Table Plots",
+              title = "Survey 1 Table Plots",
               solidHeader = TRUE,
               plotOutput("cormatplot.s1", height = "600px", width = "100%")
             )
@@ -581,7 +581,7 @@ ui <- dashboardPage(
                 #plot box
                 box(
                   width = 9,
-                  title = "Survey 2 (Cognitive Styles) Plots",
+                  title = "Survey 2 Plots",
                   solidHeader = TRUE,
                   plotOutput("plot_s2", height = 800)
                 ),
@@ -957,7 +957,7 @@ ui <- dashboardPage(
             condition = "input.tabletype_s2 == 'Correlation Matrix'",
             box(
               width = 9,
-              title = "Survey 2 (Cognitive Styles) Table Plots",
+              title = "Survey 2 Table Plots",
               solidHeader = TRUE,
               plotOutput("cormatplot.s2", height = "600px", width = "100%")
             )

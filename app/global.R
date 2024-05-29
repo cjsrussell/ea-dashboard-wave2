@@ -40,9 +40,9 @@ mytheme <- create_theme(
 
 getwd()
 
-data1 <- read.csv("../dashdata_s1.csv")
+data1 <- readRDS("../dashdata_s1.rds")
 
-data2 <- read.csv("../dashdata_s2.csv")
+data2 <- readRDS("../dashdata_s2.rds")
 #--------------------- LOAD FUNCTIONS ----------------------------------
 
 source("funs_s1.R")

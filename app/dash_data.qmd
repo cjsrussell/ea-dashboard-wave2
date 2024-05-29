@@ -232,4 +232,8 @@ head(simulated_data_s1)
 
 write.csv(simulated_data_s1, file = "dashdata_s1.csv")
 write.csv(simulated_data_s2, file = "dashdata_s2.csv")
+
+saveRDS(simulated_data_s1, file = "dashdata_s1.rds")
+saveRDS(simulated_data_s2, file = "dashdata_s2.rds")
+
 ```
