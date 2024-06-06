@@ -38,11 +38,9 @@ mytheme <- create_theme(
 
 # Survey 1
 
-getwd()
+data1 <- readRDS("dashdata_s1.rds")
+data2 <- readRDS("dashdata_s2.rds")
 
-data1 <- readRDS("../dashdata_s1.rds")
-
-data2 <- readRDS("../dashdata_s2.rds")
 #--------------------- LOAD FUNCTIONS ----------------------------------
 
 source("funs_s1.R")

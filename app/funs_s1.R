@@ -2,8 +2,6 @@
 
 
 
-#--------------------- Variable Types ---------------------------------
-
 #--------------------- Plot Function ---------------------------------
 
 
@@ -16,10 +14,58 @@ funPlot1 <-
            var1,
            var2,
            country,
-           shape = "country",
            color = "country",
            survey,
-           line) {
+           line,
+           ordnum) {
+    
+    
+    # Check args
+    
+    
+    print(paste("Var1: ", var1))
+    print(paste("Var2: ", var2))
+    print(paste("Countries: ", country))
+    print(paste("Line:", line))
+    
+    # Checking ordinal vars
+    
+    print("CHECKING FOR ORDINAL VARIABLES")
+    print(paste("Var1 Class:", class(data[[var1]])))
+    print(paste("Var2 Class:", class(data[[var2]])))
+    
+    origord <- names(data)[sapply(data, is.ordered)]
+    
+    print(origord)
+    
+
+    #set ordinal as numeric if relavent
+    
+    if (var1 %in% origord && ordnum == "Yes"){
+      
+      print("recoding ordinal var1 as numeric")
+      
+      data[[var1]] <- as.numeric(data[[var1]])
+      
+    }
+    
+    if (var2 %in% origord && ordnum == "Yes"){
+      
+      print("recoding ordinal var2 as numeric")
+      
+      
+      data[[var2]] <- as.numeric(data[[var2]])
+      
+      }
+    
+    ord_vars <- names(data)[sapply(data, is.ordered)]
+    cat_vars <- names(data)[sapply(data, is.factor)]
+    
+    print(paste("Var1 New Class:", class(data[[var1]])))
+    print(paste("Var2 New Class:", class(data[[var2]])))
+    
+    print(ord_vars)
+    
     #--------------------- Title and Labels ---------------------------------
     
     # First we create the title and labels
@@ -47,20 +93,22 @@ funPlot1 <-
     
     # Specify countries to include if not all
     
-    print(country)
+    print("Country Check")
     
     if (!("All Countries" %in% country)) {
-      data <- data %>%
-        filter(country %in% country)
+      data <- data[data$country %in% country, ]
     }
     
-    print(data$country)
+    print(unique(data$country))
     
+    
+
     #  Plot for two ordinal variables
     
     ordplot1 <- ggplot(data, aes(x = !!sym(var1),
-                                 y = !!sym(var2))) +
-      
+                                 y = !!sym(var2),
+                                 fill = !!sym("country"),
+                                 alpha = !!sym(var2))) +
       geom_bin2d() +
       theme_minimal() +
       theme(
@@ -69,12 +117,17 @@ funPlot1 <-
         axis.title.y = element_text(size = 16),
         panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank()) +
-      ggtitle(plot_title1)
+      ggtitle(plot_title1) +
+      scale_color_manual(values = c("#30ba8f", "#253f8c", "#8fb9ca", "#f0c05a", "#e9765b", "#9b59b6")) +
+      scale_fill_manual(values = c("#30ba8f", "#253f8c", "#8fb9ca", "#f0c05a", "#e9765b", "#9b59b6"))+
+      facet_grid(rows = vars(country))    +
+      scale_alpha_discrete(range = c(0.33, 1))
     
     # Plot for two categorical variables
     
     catplot1 <- ggplot(data, aes(x = !!sym(var1),
-                                 fill = !!sym(var2))) +
+                                 fill = !!sym("country"),
+                                 alpha = !!sym(var2))) +
       geom_bar(position = "stack") +
       theme_minimal() +
       theme(
@@ -82,19 +135,72 @@ funPlot1 <-
         axis.title.x = element_text(size = 16),
         axis.title.y = element_text(size = 16)
       ) +
-      ggtitle(plot_title1)
+      ggtitle(plot_title1) +
+      scale_color_manual(values = c("#30ba8f", "#253f8c", "#8fb9ca", "#f0c05a", "#e9765b", "#9b59b6")) +
+      scale_fill_manual(values = c("#30ba8f", "#253f8c", "#8fb9ca", "#f0c05a", "#e9765b", "#9b59b6"))+
+      facet_grid(rows = vars(country))    +
+      scale_alpha_discrete(range = c(0.33, 1))
     
     # Plot for two continuous variables
+    
+    ## normal
     
     contplot <-
       ggplot(data,
              aes(
                x = !!sym(var1),
                y = !!sym(var2),
-               shape = !!sym(shape),
                color = !!sym(color)
              )) +
-      geom_point(size = 4, alpha = 5 / 10) +
+      geom_point(size = 1, alpha = 5 / 10, position = position_jitter(width = 0.2)) +
+      geom_xsidedensity(aes(y = after_stat(density))) +
+      geom_ysidedensity(aes(x = after_stat(density))) +
+      labs(x = var_label1,
+           y = var_label2) +
+      theme_minimal() +
+      theme(
+        plot.title =  element_text(hjust = 0.5, size = 20),
+        axis.title.x = element_text(size = 16),
+        axis.title.y = element_text(size = 16)
+      ) +
+      ggtitle(plot_title1)     +
+      scale_color_manual(values = c("#30ba8f", "#253f8c", "#8fb9ca", "#f0c05a", "#e9765b", "#9b59b6")) +
+      scale_fill_manual(values = c("#30ba8f", "#253f8c", "#8fb9ca", "#f0c05a", "#e9765b", "#9b59b6"))
+    
+    ## if var1 is originally ordinal - to add jitter due to limited response options
+    
+    contplot2 <-
+      ggplot(data,
+             aes(
+               x = !!sym(var1),
+               y = !!sym(var2),
+               color = !!sym(color)
+             )) +
+      geom_point(size = 1, alpha = 5 / 10, position = position_jitter(width = 0.1)) +
+      geom_xsidedensity(aes(y = after_stat(density))) +
+      geom_ysidedensity(aes(x = after_stat(density))) +
+      labs(x = var_label1,
+           y = var_label2) +
+      theme_minimal() +
+      theme(
+        plot.title =  element_text(hjust = 0.5, size = 20),
+        axis.title.x = element_text(size = 16),
+        axis.title.y = element_text(size = 16)
+      ) +
+      ggtitle(plot_title1)     +
+      scale_color_manual(values = c("#30ba8f", "#253f8c", "#8fb9ca", "#f0c05a", "#e9765b", "#9b59b6")) +
+      scale_fill_manual(values = c("#30ba8f", "#253f8c", "#8fb9ca", "#f0c05a", "#e9765b", "#9b59b6"))
+    
+    ## if var2 is originally ordinal 
+    
+    contplot3 <-
+      ggplot(data,
+             aes(
+               x = !!sym(var1),
+               y = !!sym(var2),
+               color = !!sym(color)
+             )) +
+      geom_point(size = 1, alpha = 5 / 10, position = position_jitter(height = 0.1)) +
       geom_xsidedensity(aes(y = after_stat(density))) +
       geom_ysidedensity(aes(x = after_stat(density))) +
       labs(x = var_label1,
@@ -117,7 +223,8 @@ funPlot1 <-
                           aes(
                             x = !!sym(var1),
                             y = !!sym(var2),
-                            fill = str_wrap(!!sym(var1), 20)
+                            fill = !!sym("country"),
+                            alpha = !!sym(var1)
                           )) +
       stat_halfeye(
         position = "dodge",
@@ -128,13 +235,11 @@ funPlot1 <-
         point_colour = NA
       ) +
       geom_boxplot(position = "dodge",
-                   scale = 0.75,
                    width = 0.12) +
       theme_minimal() +
       theme(
         plot.title =  element_text(hjust = 0.5, size = 20),
         axis.title.x = element_text(size = 16),
-        axis.text.x = element_blank(),
         axis.ticks.x = element_blank(),
         axis.title.y = element_text(size = 16),
         legend.position = "bottom",
@@ -142,8 +247,15 @@ funPlot1 <-
         legend.key.width = unit(2, 'cm'),
         legend.text = element_text(size = 14),
       ) +
-      labs(fill = "")
-    ggtitle(plot_title1)
+      labs(fill = "")+
+    ggtitle(plot_title1) +
+      facet_grid(rows = vars(country))    +
+      scale_color_manual(values = c("#30ba8f", "#253f8c", "#8fb9ca", "#f0c05a", "#e9765b", "#9b59b6")) +
+      scale_fill_manual(values = c("#30ba8f", "#253f8c", "#8fb9ca", "#f0c05a", "#e9765b", "#9b59b6"))+
+      scale_alpha_discrete(range = c(0.33, 1))
+    
+      
+    
     
     
     
@@ -152,9 +264,10 @@ funPlot1 <-
     contcatplot2 <-
       ggplot(data,
              aes(
-               x = !!sym(var1),
-               y = !!sym(var2),
-               fill = str_wrap(!!sym(var2), 20)
+               x = !!sym(var2),
+               y = !!sym(var1),
+               fill = !!sym("country"),
+               alpha = !!sym(var2)
              )) +
       stat_halfeye(
         position = "dodge",
@@ -165,7 +278,6 @@ funPlot1 <-
         point_colour = NA
       ) +
       geom_boxplot(position = "dodge",
-                   scale = 0.75,
                    width = 0.12) +
       theme_minimal() +
       theme(
@@ -179,8 +291,12 @@ funPlot1 <-
         legend.key.width = unit(2, 'cm'),
         legend.text = element_text(size = 14),
       ) +
-      labs(fill = "")
-    ggtitle(plot_title1)
+      labs(fill = "") +
+    ggtitle(plot_title1) +
+      facet_grid(rows = vars(country))     +
+      scale_color_manual(values = c("#30ba8f", "#253f8c", "#8fb9ca", "#f0c05a", "#e9765b", "#9b59b6")) +
+      scale_fill_manual(values = c("#30ba8f", "#253f8c", "#8fb9ca", "#f0c05a", "#e9765b", "#9b59b6")) +
+      scale_alpha_discrete(range = c(0.33, 1))
     
     
     #Binary plot
@@ -239,21 +355,12 @@ funPlot1 <-
     
     #--------------------- Specify *Which* Plots ---------------------------------
     
-    #add an "if" for plots of binary variables
-    
-    print(paste("Var1: ", var1))
-    print(paste("Var2: ", var2))
-    
-    print(class(var1))
-    print(class(var2))
-    
-    
-
-    cat_vars <- names(data)[sapply(data, is.factor)]
-    ord_vars <- names(data)[sapply(data, is.ordered)]
-    
-    
     #if both are ordinal
+    
+    print("checking plot type")
+    
+    print(class(data[[var1]]))
+    print(class(data[[var2]]))
     
     if (var1 %in% ord_vars && var2 %in% ord_vars) {
       print("Both Ordinal")
@@ -288,18 +395,40 @@ funPlot1 <-
         #if both continuous (neither categorical)
         
       } else {
+        
         #without  line
         
         if (line == "No") {
-          prints
+
+          # if originaly ordinal
           
-          contplot
+          if (var1 %in% origord){
+            
+          contplot2
+              
+          } else if(var2 %in% origord){
+            
+          contplot3  
+            
+          } else {
+            
+          contplot}
           
           #with line
           
         } else {
-          contplot +
-            geom_smooth(show.legend = FALSE)
+          
+          if (var1 %in% origord){
+            
+            contplot2 + geom_smooth(show.legend = FALSE)
+            
+          } else if(var2 %in% origord){
+            
+            contplot3 + geom_smooth(show.legend = FALSE) 
+            
+          } else {
+            
+            contplot + geom_smooth(show.legend = FALSE)}
         }
         
       }
@@ -344,13 +473,13 @@ funPlot1 <-
       
       if ((!"All Countries" %in% country)) {
         data_tab <- data %>%
-          select(-sountry, -id, -gender) %>%
+          select(-country, -gender) %>%
           select(all_of(cormatvars)) %>% #get variables for matrix
           mutate_at(vars(all_of(cormatvars)), as.numeric)  #turn them all numeric (or make NA if not)
         
       } else {
         data_tab <- data %>%
-          select(-country, -id, -gender) %>%
+          select(-country, -gender) %>%
           select(all_of(cormatvars)) %>%
           mutate_at(vars(all_of(cormatvars)), as.numeric)
         

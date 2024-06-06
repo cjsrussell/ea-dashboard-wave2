@@ -5,6 +5,8 @@ server <- function(input, output) {
   
 #--------------------- Info ----------------------------------
   
+  str(data1)
+  
   
   output$text1 <- renderUI({
     text <- "Hi!<br><br>Welcome to the dashboard for the second wave of data for the Explaining Atheism project. This is currently a dummy/test site with fake data as we have not yet released our real data. This site will be updated to have the real data as soon as its out. But for now, feel free to see how it  works and have a play. If you want to check out how it is built have a look at this <a href='https://connairrussell.co.uk/posts/shinydashboard-blog/'>blog</a> I wrote, or see the sourcecode on <a href='https://github.com/cjsrussell/ea-dashboard-wave2'>GitHub</a> :) <br><br> The dashboard is organised into the two separate surveys within the study, along with a section for the belief measures that were in both surveys.
@@ -130,7 +132,8 @@ Here you will find information about all of the measures used in our questionnai
       var1 = input$select_var1_s1,
       var2 = input$select_var2_s1,
       country = input$select_country_s1,
-      line = input$line_s1
+      line = input$line_s1, 
+      ordnum = input$ordnum_s1
     )
   )
   
