@@ -11,6 +11,9 @@ library(gtsummary)   #for GT tables
 library(kableExtra)  #for kable tables
 library(corrplot)    #for correlation matrix plot
 library(ggdist)      #for halfeye plots
+library(ggsci)       #for colour palettes
+library(plotly)
+
 
 #--------------------- Theme ----------------------------------
 

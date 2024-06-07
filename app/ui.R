@@ -82,21 +82,15 @@ ui <- dashboardPage(
                 htmlOutput("text1")
               ))),
       
-      
-      
       #------------------------------------------ Survey 1 -----------------------------------
       
       #Items/boxes in survey plots tab
       
       tabItem(tabName = "surv1_plots",
               fluidRow(
-                #plot box
-                box(
-                  width = 9,
-                  title = "Survey 1 Plots",
-                  solidHeader = TRUE,
-                  plotOutput("plot_s1", height = 800)
-                ),
+                #plot box - set as UI box as is dynamically generated in server.R
+                
+                uiOutput("plot_box"),
                 
                 #settings boxes
                 box(
@@ -106,6 +100,16 @@ ui <- dashboardPage(
                   status = "primary",
                   "",
                   #inputs
+                  
+                  #single plot?
+                  selectInput(
+                    inputId = "single_s1",
+                    label = "Single Variable Summary Plot?",
+                    choices = c("Yes",
+                                "No"),
+                    selected = "No"
+                  ),
+                  
                   #var 1 input
                   selectInput(
                     inputId = "select_var1_s1",
@@ -192,7 +196,11 @@ ui <- dashboardPage(
                     multiple = FALSE
                   ),
                   #var2 input
-                  selectInput(
+                  
+                  
+                  conditionalPanel(
+                    condition = "input.single_s1 == 'No'",
+                    selectInput(
                     "select_var2_s1",
                     "Select Variable 2",
                     list(
@@ -274,7 +282,7 @@ ui <- dashboardPage(
                       "spiritualForce"
                     ),
                     multiple = FALSE
-                  ),
+                  )),
                   #countries input
                   selectInput(
                     inputId = "select_country_s1",

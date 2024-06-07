@@ -1,11 +1,11 @@
 name: ea-dashboard-w2
-title: ea-dashboard-w2
+title: app
 username: cjsrussell
 account: cjsrussell
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 12116095
-bundleId: 8704192
+bundleId: 8715313
 url: https://cjsrussell.shinyapps.io/ea-dashboard-w2/
 version: 1
 asMultiple: FALSE

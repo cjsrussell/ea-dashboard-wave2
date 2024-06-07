@@ -23,6 +23,27 @@ Here you will find information about all of the measures used in our questionnai
 
 # Plots
   
+  
+  # Plot box
+  
+  output$plot_box <- renderUI({
+    if (input$single_s1 == "Yes") {
+      box(
+        width = 9,
+        title = "Survey 1 Single Variable Plot",
+        solidHeader = TRUE,
+        plotlyOutput("plot_s1.1", height = 800)
+      )
+    } else {
+      box(
+        width = 9,
+        title = "Survey 1 Two Variable Plot",
+        solidHeader = TRUE,
+        plotOutput("plot_s1", height = 800)
+      )
+    }
+  })
+  
   # Variable information box
   
   
@@ -137,6 +158,15 @@ Here you will find information about all of the measures used in our questionnai
     )
   )
   
+  output$plot_s1.1 <- renderPlotly(
+    funPlot2(
+      data1,
+      var1 = input$select_var1_s1,
+      country = input$select_country_s1,
+      ordnum = input$ordnum_s1
+    )
+  )
+  
   # Table outputs
   
     # Demographics
@@ -193,9 +223,6 @@ Here you will find information about all of the measures used in our questionnai
       var2 = input$sumstatsvars.s1
     )
   )
-  
-  
-  
   
   
 #--------------------- Survey 2 ----------------------------------
