@@ -12,7 +12,7 @@ library(kableExtra)  #for kable tables
 library(corrplot)    #for correlation matrix plot
 library(ggdist)      #for halfeye plots
 library(ggsci)       #for colour palettes
-library(plotly)
+library(plotly)      #for plotly interactive plots
 
 
 #--------------------- Theme ----------------------------------
@@ -41,8 +41,8 @@ mytheme <- create_theme(
 
 # Survey 1
 
-data1 <- readRDS("dashdata_s1.rds")
-data2 <- readRDS("dashdata_s2.rds")
+data1 <- readRDS("s1_dash.rds")
+data2 <- readRDS("s2_dash.rds")
 
 #--------------------- LOAD FUNCTIONS ----------------------------------
 
